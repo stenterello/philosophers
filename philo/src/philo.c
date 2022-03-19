@@ -13,6 +13,7 @@ int	philosophers(int argc, char **argv)
 		context.times_to_eat = ft_atoi(argv[5]);
 	else
 		context.times_to_eat = -1;
+	context.some_die = 0;
 	sit_at_table(&context);
 	return (0);
 }
@@ -20,19 +21,13 @@ int	philosophers(int argc, char **argv)
 int	main(int argc, char **argv)
 {
 	if (argc < 5 || argc > 6)
-	{
-		usage();
-		return (-1);
-	}
+		return (usage());
 	else
 	{
 		if (checks(argc, argv) == -1)
 			return (-1);
 		if (philosophers(argc, argv) != 0)
-		{
-			general_error();
-			return (-1);
-		}
+			return (general_error());
 	}
 	return (0);
 }

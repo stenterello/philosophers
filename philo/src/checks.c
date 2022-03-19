@@ -87,16 +87,12 @@ int	checks(int argc, char **argv)
 	i = 1;
 	while (i < argc)
 	{
+		if (ft_atoi(argv[i]) > 250)
+			return (error_too_many());
 		if (ft_atoi(argv[i]) < 0 || check_digits(argv[i]) == -1)
-		{
-			error_args();
-			return (-1);
-		}
+			return (error_args());
 		if (check_ints(argv[i]) != 0)
-		{
-			error_ints();
-			return (-1);
-		}
+			return (error_ints());
 		i++;	
 	}
 	return (0);

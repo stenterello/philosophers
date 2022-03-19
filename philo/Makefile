@@ -3,7 +3,9 @@ NAME = philo
 SRC = philo.c \
 		error.c \
 		checks.c \
-		symposium.c
+		symposium.c \
+		utils.c \
+		time.c
 
 SRCS = $(addprefix src/, $(SRC))
 
