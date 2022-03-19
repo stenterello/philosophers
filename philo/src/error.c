@@ -1,8 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ddelladi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/19 16:05:15 by ddelladi          #+#    #+#             */
+/*   Updated: 2022/03/19 16:05:17 by ddelladi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 int	usage(void)
 {
-	printf("Usage: ./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosophers_must_eat]\n");
+	printf("Usage: ./philo number_of_philosophers ");
+	printf("time_to_die time_to_eat time_to_sleep ");
+	printf("[number_of_times_each_philosophers_must_eat]\n");
 	return (-1);
 }
 
@@ -12,9 +26,9 @@ int	error_args(void)
 	return (-1);
 }
 
-int	error_ints(void)
+int	error_ll(void)
 {
-	printf("Arguments must be integers.\n");
+	printf("Arguments must be long long type.\n");
 	return (-1);
 }
 

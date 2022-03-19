@@ -1,5 +1,16 @@
-#include "philo.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ddelladi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/19 16:05:24 by ddelladi          #+#    #+#             */
+/*   Updated: 2022/03/19 16:05:26 by ddelladi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "philo.h"
 
 int	philosophers(int argc, char **argv)
 {
@@ -14,6 +25,8 @@ int	philosophers(int argc, char **argv)
 	else
 		context.times_to_eat = -1;
 	context.some_die = 0;
+	context.all_eaten = 0;
+	context.start_time = get_time(NULL, 0);
 	sit_at_table(&context);
 	return (0);
 }

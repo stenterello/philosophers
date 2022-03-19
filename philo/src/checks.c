@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   checks.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ddelladi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/19 16:04:26 by ddelladi          #+#    #+#             */
+/*   Updated: 2022/03/19 16:04:29 by ddelladi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 int	ft_atoi(const char *str)
@@ -27,7 +39,7 @@ int	ft_atoi(const char *str)
 	return (ret * sign);
 }
 
-static long	ft_atol(char *str)
+static long long	ft_atoull(char *str)
 {
 	int		i;
 	int		sign;
@@ -70,12 +82,12 @@ static int	check_digits(char *str)
 	return (0);
 }
 
-static int	check_ints(char *str)
+static int	check_ll(char *str)
 {
 	long	n;
 
-	n = ft_atol(str);
-	if (n > 2147483647 || n < -2147483648)
+	n = ft_atoull(str);
+	if (n > 9223372036854775807 || n < -9223372036854775807)
 		return (-1);
 	return (0);
 }
@@ -87,13 +99,13 @@ int	checks(int argc, char **argv)
 	i = 1;
 	while (i < argc)
 	{
-		if (ft_atoi(argv[i]) > 250)
+		if (ft_atoi(argv[i]) > 250 && i == 0)
 			return (error_too_many());
-		if (ft_atoi(argv[i]) < 0 || check_digits(argv[i]) == -1)
+		if (ft_atoull(argv[i]) < 0 || check_digits(argv[i]) == -1)
 			return (error_args());
-		if (check_ints(argv[i]) != 0)
-			return (error_ints());
-		i++;	
+		if (check_ll(argv[i]) != 0)
+			return (error_ll());
+		i++;
 	}
 	return (0);
 }
