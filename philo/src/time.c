@@ -18,6 +18,14 @@ uint64_t	get_time(t_philos *philo, int flag)
 
 	gettimeofday(&tv, NULL);
 	if (flag)
-		philo->last_meal = (tv.tv_sec) * 1000 + (tv.tv_usec) / 1000;
+		philo->last_meal = (tv.tv_sec) * 1000 + (tv.tv_usec) / 1000 - philo->context->start_time;
+	return (((tv.tv_sec) * 1000 + (tv.tv_usec) / 1000) - philo->context->start_time);
+}
+
+uint64_t	get_start_time(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec) * 1000 + (tv.tv_usec) / 1000);
 }

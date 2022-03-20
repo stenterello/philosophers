@@ -19,18 +19,19 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <pthread.h>
+# include <stdint.h>
 
 typedef struct s_context
 {
-	int			num_philos;
-	uint64_t	time_die;
-	uint64_t	time_eat;
-	uint64_t	time_sleep;
-	uint64_t	times_to_eat;
-	int			some_die;
-	int			all_eaten;
-	uint64_t	start_time;
-	pthread_t	monitor;
+	int				num_philos;
+	uint64_t		time_die;
+	uint64_t		time_eat;
+	uint64_t		time_sleep;
+	uint64_t		times_to_eat;
+	int				some_die;
+	uint64_t		start_time;
+	pthread_t		monitor;
+	pthread_mutex_t	writing;
 }				t_context;
 
 typedef struct s_forks
@@ -43,18 +44,14 @@ typedef struct s_forks
 typedef struct s_philos
 {
 	int			id;
-	int			is_eating;
-	int			is_sleeping;
-	int			is_thinking;
-	int			is_blocked;
 	int			dead;
-	int			hungry;
 	long		last_meal;
 	int			times_eaten;
-	t_context	context;
+	t_context	*context;
 	t_forks		*l_fork;
 	t_forks		*r_fork;
 	pthread_t	thread;
+	pthread_mutex_t	gen_mutex;
 }				t_philos;
 
 int			usage(void);
@@ -62,6 +59,7 @@ int			error_args(void);
 int			error_ll(void);
 int			error_too_many(void);
 int			general_error(void);
+void		write_error(char *str);
 int			ft_atoi(const char *str);
 int			checks(int argc, char **argv);
 int			sit_at_table(t_context *context);
@@ -71,5 +69,6 @@ void		get_mutexes(t_context *context, t_forks *forks);
 void		init_mutexes(t_forks *forks, t_context *context);
 void		kill_mutexes(t_forks *forks, t_context *context);
 uint64_t	get_time(t_philos *philo, int flag);
+uint64_t	get_start_time(void);
 
 #endif

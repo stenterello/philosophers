@@ -14,32 +14,32 @@
 
 int	usage(void)
 {
-	printf("Usage: ./philo number_of_philosophers ");
-	printf("time_to_die time_to_eat time_to_sleep ");
-	printf("[number_of_times_each_philosophers_must_eat]\n");
+	write_error("Usage: ./philo number_of_philosophers ");
+	write_error("time_to_die time_to_eat time_to_sleep ");
+	write_error("[number_of_times_each_philosophers_must_eat]\n");
 	return (-1);
 }
 
 int	error_args(void)
 {
-	printf("Non-positive integers parameters were passed to executable.\n");
+	write_error("Non-positive integers parameters were passed to executable.\n");
 	return (-1);
 }
 
 int	error_ll(void)
 {
-	printf("Arguments must be long long type.\n");
+	write_error("Arguments must be long long type.\n");
 	return (-1);
 }
 
 int	general_error(void)
 {
-	printf("Error.\n");
+	write_error("Error.\n");
 	return (-1);
 }
 
 int	error_too_many(void)
 {
-	printf("Too many philosophers.\n");
+	write_error("Too many philosophers.\n");
 	return (-1);
 }

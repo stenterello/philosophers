@@ -12,59 +12,49 @@
 
 #include "philo.h"
 
-void	*eat(void *phi)
+void	*cycle(void *phi)
 {
 	t_philos	*philo;
 
 	philo = (t_philos *)phi;
+	pthread_mutex_lock(&philo->gen_mutex);
 	if (philo->id % 2)
 	{
 		pthread_mutex_lock(&philo->l_fork->mutex);
-		printf("[%llu] %d has taken a fork\n", get_time(philo, 0) - philo->context.start_time, philo->id);
-		philo->is_blocked = 1;
+		pthread_mutex_lock(&philo->context->writing);
+		printf("[%lu] %d has taken a fork\n", get_time(philo, 0), philo->id);
+		pthread_mutex_unlock(&philo->context->writing);
 		pthread_mutex_lock(&philo->r_fork->mutex);
-		printf("[%llu] %d has taken a fork\n", get_time(philo, 0) - philo->context.start_time, philo->id);
+		pthread_mutex_lock(&philo->context->writing);
+		printf("[%lu] %d has taken a fork\n", get_time(philo, 0), philo->id);
+		pthread_mutex_unlock(&philo->context->writing);
 	}
 	else
 	{
 		pthread_mutex_lock(&philo->r_fork->mutex);
-		printf("[%llu] %d has taken a fork\n", get_time(philo, 0) - philo->context.start_time, philo->id);
-		philo->is_blocked = 1;
+		pthread_mutex_lock(&philo->context->writing);
+		printf("[%lu] %d has taken a fork\n", get_time(philo, 0), philo->id);
+		pthread_mutex_unlock(&philo->context->writing);
 		pthread_mutex_lock(&philo->l_fork->mutex);
-		printf("[%llu] %d has taken a fork\n", get_time(philo, 0) - philo->context.start_time, philo->id);
+		pthread_mutex_lock(&philo->context->writing);
+		printf("[%lu] %d has taken a fork\n", get_time(philo, 0), philo->id);
+		pthread_mutex_unlock(&philo->context->writing);
 	}
-	philo->is_eating = 1;
-	printf("[%llu] %d is eating\n", get_time(philo, 1) - philo->context.start_time, philo->id);
-	usleep(philo->context.time_eat * 1000);
+	pthread_mutex_lock(&philo->context->writing);
+	printf("[%lu] %d is eating\n", get_time(philo, 1), philo->id);
+	pthread_mutex_unlock(&philo->context->writing);
+	usleep(philo->context->time_eat * 1000);
 	philo->times_eaten++;
-	philo->is_eating = 0;
-	philo->is_blocked = 0;
 	pthread_mutex_unlock(&philo->l_fork->mutex);
 	pthread_mutex_unlock(&philo->r_fork->mutex);
-	return (NULL);
-}
-
-void	*sleeping(void *phi)
-{
-	t_philos	*philo;
-
-	philo = (t_philos *)phi;
-	philo->is_sleeping = 1;
-	printf("[%llu] %d is sleeping\n", get_time(philo, 0) - philo->context.start_time, philo->id);
-	usleep(philo->context.time_sleep * 1000);
-	philo->is_sleeping = 0;
-	return (NULL);
-}
-
-void	*thinking(void *phi)
-{
-	t_philos	*philo;
-
-	philo = (t_philos *)phi;
-	philo->is_thinking = 1;
-	printf("[%llu] %d is thinking\n", get_time(philo, 0) - philo->context.start_time, philo->id);
-	usleep(philo->context.time_sleep * 1000);
-	philo->is_thinking = 0;
+	pthread_mutex_lock(&philo->context->writing);
+	printf("[%lu] %d is sleeping\n", get_time(philo, 0), philo->id);
+	pthread_mutex_unlock(&philo->context->writing);
+	usleep(philo->context->time_sleep * 1000);
+	pthread_mutex_lock(&philo->context->writing);
+	printf("[%lu] %d is thinking\n", get_time(philo, 0), philo->id);
+	pthread_mutex_unlock(&philo->context->writing);
+	pthread_mutex_unlock(&philo->gen_mutex);
 	return (NULL);
 }
 
@@ -73,13 +63,27 @@ int	monitor_meals(t_philos *philos)
 	int	i;
 
 	i = 0;
-	while (i < philos[0].context.num_philos)
+	while (i < philos[0].context->num_philos)
 	{
 		if (!philos[i].times_eaten)
 			return (0);
 		i++;
 	}
 	return (1);
+}
+
+int	find_dead_man(t_philos *philos)
+{
+	int	i;
+
+	i = 0;
+	while (i < philos[0].context->num_philos)
+	{
+		if (philos[i].dead)
+			return (i + 1);
+		i++;
+	}
+	return (0);
 }
 
 void	*monitor(void *philos)
@@ -89,26 +93,16 @@ void	*monitor(void *philos)
 
 	philo = (t_philos *)philos;
 	i = -1;
-	while (++i < philo[0].context.num_philos)
+	while (++i < philo[0].context->num_philos)
 	{
-		if (get_time(&philo[i], 0) - philo[i].last_meal > philo[0].context.time_die)
-			philo[i].context.some_die = 1;
+		if (get_time(&philo[i], 0) - philo[i].last_meal > philo[0].context->time_die)
+		{
+			philo[i].context->some_die = 1;
+			philo[i].dead = 1;
+			return (NULL);
+		}
 	}
 	return (NULL);
-}
-
-int	find_dead_man(t_philos *philos)
-{
-	int	i;
-
-	i = 0;
-	while (i < philos[0].context.num_philos)
-	{
-		if (philos[i].dead)
-			return (i + 1);
-		i++;
-	}
-	return (0);
 }
 
 void	start_symposium(t_context *context, t_philos *philos)
@@ -119,53 +113,14 @@ void	start_symposium(t_context *context, t_philos *philos)
 	{
 		i = -1;
 		while (++i < context->num_philos)
-		{
-			if (!philos[i].is_sleeping && !philos[i].is_eating && !philos[i].is_thinking)
-			{
-				pthread_create(&philos[i].thread, NULL, &eat, &philos[i]);
-				usleep(100);
-			}
-		}
-		i = -1;
-		while (++i < context->num_philos)
-		{
-			if (!philos[i].is_sleeping && !philos[i].is_eating && !philos[i].is_thinking && !philos[i].is_blocked)
-			{
-				pthread_create(&philos[i].thread, NULL, &sleeping, &philos[i]);
-				usleep(100);
-			}
-		}
-		i = -1;
-		while (++i < context->num_philos)
-		{
-			if (!philos[i].is_sleeping && !philos[i].is_eating && !philos[i].is_thinking && !philos[i].is_blocked)
-			{
-				pthread_create(&philos[i].thread, NULL, &thinking, &philos[i]);
-				usleep(100);
-			}
-		}
-		// while (++i < context->num_philos)
-		// 	pthread_join(philos[i].thread, NULL);
+			pthread_create(&philos[i].thread, NULL, &cycle, &philos[i]);
 		pthread_create(&context->monitor, NULL, &monitor, (void *)philos);
-		pthread_join(context->monitor, NULL);
 		if (context->some_die)
-		{
-			printf("[%llu] %d is dead\n", get_time(&philos[i], 0) - context->start_time, find_dead_man(philos));
-			break ;
-		}
+			printf("[%lu] %d is dead\n", get_time(&philos[1], 0), find_dead_man(philos));
 	}
-}
-
-void	print_info(t_philos *philos)
-{
-	int	i;
-
 	i = 0;
-	while (i < philos[0].context.num_philos)
-	{
-		printf("Il filosofo %d, con fork_left: %d, fork_right %d\n", philos[i].id, philos[i].l_fork->id, philos[i].r_fork->id);
-		i++;
-	}
+	while (i < context->num_philos)
+		pthread_mutex_destroy(&philos[i++].gen_mutex);
 }
 
 int	sit_at_table(t_context *context)
