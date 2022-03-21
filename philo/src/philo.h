@@ -27,8 +27,9 @@ typedef struct s_context
 	uint64_t		time_die;
 	uint64_t		time_eat;
 	uint64_t		time_sleep;
-	uint64_t		times_to_eat;
+	int				times_to_eat;
 	int				some_die;
+	int				finished;
 	uint64_t		start_time;
 	pthread_t		monitor;
 	pthread_mutex_t	writing;
@@ -43,14 +44,14 @@ typedef struct s_forks
 
 typedef struct s_philos
 {
-	int			id;
-	int			dead;
-	long		last_meal;
-	int			times_eaten;
-	t_context	*context;
-	t_forks		*l_fork;
-	t_forks		*r_fork;
-	pthread_t	thread;
+	int				id;
+	int				dead;
+	long			last_meal;
+	int				times_eaten;
+	t_context		*context;
+	t_forks			*l_fork;
+	t_forks			*r_fork;
+	pthread_t		thread;
 	pthread_mutex_t	gen_mutex;
 }				t_philos;
 

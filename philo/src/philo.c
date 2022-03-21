@@ -26,6 +26,7 @@ int	philosophers(int argc, char **argv)
 		context.times_to_eat = -1;
 	context.some_die = 0;
 	context.start_time = get_start_time();
+	context.finished = 0;
 	sit_at_table(&context);
 	return (0);
 }
