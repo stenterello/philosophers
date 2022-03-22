@@ -6,6 +6,7 @@ SRC = philo.c \
 		symposium.c \
 		utils.c \
 		utils_2.c \
+		utils_3.c \
 		time.c
 
 SRCS = $(addprefix src/, $(SRC))

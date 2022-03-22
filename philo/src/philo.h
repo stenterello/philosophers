@@ -46,13 +46,12 @@ typedef struct s_philos
 {
 	int				id;
 	int				dead;
-	long			last_meal;
+	uint64_t		last_meal;
 	int				times_eaten;
 	t_context		*context;
 	t_forks			*l_fork;
 	t_forks			*r_fork;
 	pthread_t		thread;
-	pthread_mutex_t	gen_mutex;
 }				t_philos;
 
 int			usage(void);
@@ -71,5 +70,11 @@ void		init_mutexes(t_forks *forks, t_context *context);
 void		kill_mutexes(t_forks *forks, t_context *context);
 uint64_t	get_time(t_philos *philo, int flag);
 uint64_t	get_start_time(void);
+void		write_message(t_philos *philo, int flag);
+int			find_dead_man(t_philos *philos);
+void		print_info(t_philos *philos);
+int			monitor_meals(t_philos *philos);
+void		left_handed(t_philos *philo);
+void		right_handed(t_philos *philo);
 
 #endif
