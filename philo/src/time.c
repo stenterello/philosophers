@@ -18,7 +18,7 @@ uint64_t	get_time(t_philos *philo, int flag)
 
 	gettimeofday(&tv, NULL);
 	if (flag)
-		philo->last_meal = (tv.tv_sec) * 1000 + (tv.tv_usec) / 1000  - philo->context->start_time;
+		philo->last_meal = ((tv.tv_sec) * 1000 + (tv.tv_usec) / 1000)  - philo->context->start_time;
 	return (((tv.tv_sec) * 1000 + (tv.tv_usec) / 1000));
 }
 

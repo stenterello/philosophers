@@ -12,12 +12,24 @@
 
 #include "philo.h"
 
+void	don_t_wake_cpu(t_philos *philo, uint64_t time)
+{
+	uint64_t	start;
+
+	start = get_time(philo, 0) - philo->context->start_time;
+	while (!philo->context->some_die)
+	{
+		if ((get_time(philo, 0) - philo->context->start_time) - start >= time)
+			break ;
+		usleep(50);
+	}
+}
+
 void	*cycle(void *phi)
 {
 	t_philos	*philo;
 
 	philo = (t_philos *)phi;
-	// Ciclo infinito del thread del filosofo
 	while (!philo->context->finished && !philo->context->some_die)
 	{
 		if (philo->id % 2)
@@ -28,13 +40,13 @@ void	*cycle(void *phi)
 		write_message(philo, 0);
 		pthread_mutex_unlock(&philo->context->writing);
 		philo->times_eaten++;
-		usleep(philo->context->time_eat * 1000);
+		don_t_wake_cpu(philo, philo->context->time_eat);
 		pthread_mutex_unlock(&philo->l_fork->mutex);
 		pthread_mutex_unlock(&philo->r_fork->mutex);
 		pthread_mutex_lock(&philo->context->writing);
 		write_message(philo, 1);
 		pthread_mutex_unlock(&philo->context->writing);
-		usleep(philo->context->time_sleep * 1000);
+		don_t_wake_cpu(philo, philo->context->time_sleep);
 		pthread_mutex_lock(&philo->context->writing);
 		write_message(philo, 2);
 		pthread_mutex_unlock(&philo->context->writing);
@@ -48,18 +60,19 @@ void	*monitor(void *philos)
 	t_philos	*philo;
 
 	philo = (t_philos *)philos;
-	while (!philo[0].context->finished && !philo[0].context->some_die)
+	while (!philo[0].context->finished)
 	{
 		i = -1;
-		while (++i < philo[0].context->num_philos)
+		while (++i < philo[0].context->num_philos && !philo[0].context->some_die)
 		{
 			if (get_time(&philo[0], 0) - philo[0].context->start_time - philo[i].last_meal > philo[0].context->time_die)
 			{
 				philo[i].context->some_die = 1;
 				philo[i].dead = 1;
-				printf("[%lu] %d is dead\n", get_time(&philo[0], 0) - philo[0].context->start_time, philo[i].id);
+				printf("%lu %d died\n", get_time(&philo[0], 0) - philo[0].context->start_time, philo[i].id);
 				return (NULL);
 			}
+			usleep(50);
 		}
 		if (philo[0].context->times_to_eat != -1 && !philo[0].context->some_die)
 		{
@@ -74,15 +87,13 @@ void	start_symposium(t_context *context, t_philos *philos)
 {
 	int	i;
 
-	// Inizializza i thread dei filosofi
+	pthread_create(&context->monitor, NULL, &monitor, (void *)philos);
 	i = -1;
 	while (++i < context->num_philos)
+	{
 		pthread_create(&philos[i].thread, NULL, &cycle, &philos[i]);
-
-	// Inizializza il thread di controllo
-	pthread_create(&context->monitor, NULL, &monitor, (void *)philos);
-
-	// Aspetta la fine del thread di controllo
+		usleep(100);
+	}
 	pthread_join(context->monitor, NULL);
 }
 
@@ -96,6 +107,5 @@ int	sit_at_table(t_context *context)
 	init_mutexes(forks, context);
 	start_symposium(context, philos);
 	kill_mutexes(forks, context);
-	//print_info(philos);
 	return (0);
 }

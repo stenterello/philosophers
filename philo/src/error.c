@@ -26,9 +26,9 @@ int	error_args(void)
 	return (-1);
 }
 
-int	error_ll(void)
+int	error_ui(void)
 {
-	write_error("Arguments must be long long type.\n");
+	write_error("Arguments must be of unsigned integer type.\n");
 	return (-1);
 }
 

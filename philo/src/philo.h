@@ -38,7 +38,6 @@ typedef struct s_context
 typedef struct s_forks
 {
 	int				id;
-	int				busy;
 	pthread_mutex_t	mutex;
 }				t_forks;
 
@@ -56,7 +55,7 @@ typedef struct s_philos
 
 int			usage(void);
 int			error_args(void);
-int			error_ll(void);
+int			error_ui(void);
 int			error_too_many(void);
 int			general_error(void);
 void		write_error(char *str);
