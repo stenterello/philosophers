@@ -69,7 +69,7 @@ void	*monitor(void *philos)
 			{
 				philo[i].context->some_die = 1;
 				philo[i].dead = 1;
-				printf("%lu %d died\n", get_time(&philo[0], 0) - philo[0].context->start_time, philo[i].id);
+				printf("%llu %d died\n", get_time(&philo[0], 0) - philo[0].context->start_time, philo[i].id);
 				return (NULL);
 			}
 			usleep(50);

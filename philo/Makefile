@@ -15,7 +15,7 @@ OBJS = $(SRCS:.c=.o)
 
 CC = gcc
 
-FLAGS = -Wall -Werror -Wextra -g
+FLAGS = -Wall -Werror -Wextra
 
 $(NAME): $(OBJS)
 	$(CC) $(FLAGS) $(SRCS) -pthread -o $(NAME)

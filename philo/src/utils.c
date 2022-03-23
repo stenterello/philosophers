@@ -35,6 +35,7 @@ void	get_philosophers(t_context *context, t_philos *philos, t_forks *forks)
 		philos[i].l_fork = &forks[get_fork_id(i + 1, context)];
 		philos[i].r_fork = &forks[get_fork_id(i, context)];
 		philos[i].times_eaten = 0;
+		philos[i].last_meal = 0;
 		i++;
 	}
 }

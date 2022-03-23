@@ -71,7 +71,6 @@ uint64_t	get_time(t_philos *philo, int flag);
 uint64_t	get_start_time(void);
 void		write_message(t_philos *philo, int flag);
 int			find_dead_man(t_philos *philos);
-void		print_info(t_philos *philos);
 int			monitor_meals(t_philos *philos);
 void		left_handed(t_philos *philo);
 void		right_handed(t_philos *philo);
