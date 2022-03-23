@@ -63,22 +63,22 @@ void	*monitor(void *philos)
 	while (!philo[0].context->finished)
 	{
 		i = -1;
-		while (++i < philo[0].context->num_philos && !philo[0].context->some_die)
+		while (++i < philo[0].context->num_philos
+			&& !philo[0].context->some_die)
 		{
-			if (get_time(&philo[0], 0) - philo[0].context->start_time - philo[i].last_meal > philo[0].context->time_die)
+			if (get_time(&philo[0], 0) - philo[0].context->start_time
+				- philo[i].last_meal > philo[0].context->time_die)
 			{
 				philo[i].context->some_die = 1;
-				philo[i].dead = 1;
-				printf("%llu %d died\n", get_time(&philo[0], 0) - philo[0].context->start_time, philo[i].id);
+				printf("%llu %d died\n", get_time(&philo[0], 0)
+					- philo[0].context->start_time, philo[i].id);
 				return (NULL);
 			}
 			usleep(50);
 		}
-		if (philo[0].context->times_to_eat != -1 && !philo[0].context->some_die)
-		{
-			if (monitor_meals(philo))
+		if (philo[0].context->times_to_eat != -1 && !philo[0].context->some_die
+			&& monitor_meals(philo))
 				philo[0].context->finished = 1;
-		}
 	}
 	return (NULL);
 }

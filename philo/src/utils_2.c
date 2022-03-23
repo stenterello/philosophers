@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_2.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ddelladi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/23 18:30:55 by ddelladi          #+#    #+#             */
+/*   Updated: 2022/03/23 18:31:12 by ddelladi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 void	write_error(char *str)
@@ -12,11 +24,16 @@ void	write_error(char *str)
 void	write_message(t_philos *philo, int flag)
 {
 	if (!flag && !philo->context->some_die && !philo->context->finished)
-		printf("%llu %d is eating\n", get_time(philo, 1) - philo->context->start_time, philo->id);
-	else if (flag == 1 && !philo->context->some_die && !philo->context->finished)
-		printf("%llu %d is sleeping\n", get_time(philo, 0) - philo->context->start_time, philo->id);
-	else if (flag == 2 && !philo->context->some_die && !philo->context->finished)
-		printf("%llu %d is thinking\n", get_time(philo, 0) - philo->context->start_time, philo->id);
+		printf("%llu %d is eating\n", get_time(philo, 1)
+			- philo->context->start_time, philo->id);
+	else if (flag == 1 && !philo->context->some_die
+		&& !philo->context->finished)
+		printf("%llu %d is sleeping\n", get_time(philo, 0)
+			- philo->context->start_time, philo->id);
+	else if (flag == 2 && !philo->context->some_die
+		&& !philo->context->finished)
+		printf("%llu %d is thinking\n", get_time(philo, 0)
+			- philo->context->start_time, philo->id);
 }
 
 int	find_dead_man(t_philos *philos)

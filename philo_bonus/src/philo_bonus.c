@@ -8,7 +8,7 @@ int	sit_at_table(t_context *context)
 	if (get_sempahores(&forks, context) == -1)
 		die("Semaphore initiation produced error");
 	get_philosophers(&philos, &forks, context);
-	
+	start_symposium(philos);
 
 	return (0);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_3.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ddelladi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/23 18:31:01 by ddelladi          #+#    #+#             */
+/*   Updated: 2022/03/23 18:31:09 by ddelladi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 void	left_handed(t_philos *philo)
@@ -5,12 +17,14 @@ void	left_handed(t_philos *philo)
 	pthread_mutex_lock(&philo->l_fork->mutex);
 	pthread_mutex_lock(&philo->context->writing);
 	if (!philo->context->finished && !philo->context->some_die)
-		printf("%llu %d has taken a fork\n", get_time(philo, 0) - philo->context->start_time, philo->id);
+		printf("%llu %d has taken a fork\n", get_time(philo, 0)
+			- philo->context->start_time, philo->id);
 	pthread_mutex_unlock(&philo->context->writing);
 	pthread_mutex_lock(&philo->r_fork->mutex);
 	pthread_mutex_lock(&philo->context->writing);
 	if (!philo->context->finished && !philo->context->some_die)
-		printf("%llu %d has taken a fork\n", get_time(philo, 0) - philo->context->start_time, philo->id);
+		printf("%llu %d has taken a fork\n", get_time(philo, 0)
+			- philo->context->start_time, philo->id);
 	pthread_mutex_unlock(&philo->context->writing);
 }
 
@@ -19,12 +33,14 @@ void	right_handed(t_philos *philo)
 	pthread_mutex_lock(&philo->r_fork->mutex);
 	pthread_mutex_lock(&philo->context->writing);
 	if (!philo->context->finished && !philo->context->some_die)
-		printf("%llu %d has taken a fork\n", get_time(philo, 0) - philo->context->start_time, philo->id);
+		printf("%llu %d has taken a fork\n", get_time(philo, 0)
+			- philo->context->start_time, philo->id);
 	pthread_mutex_unlock(&philo->context->writing);
 	pthread_mutex_lock(&philo->l_fork->mutex);
 	pthread_mutex_lock(&philo->context->writing);
 	if (!philo->context->finished && !philo->context->some_die)
-		printf("%llu %d has taken a fork\n", get_time(philo, 0) - philo->context->start_time, philo->id);
+		printf("%llu %d has taken a fork\n", get_time(philo, 0)
+			- philo->context->start_time, philo->id);
 	pthread_mutex_unlock(&philo->context->writing);
 }
 

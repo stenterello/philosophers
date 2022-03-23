@@ -63,7 +63,8 @@ int			ft_atoi(const char *str);
 int			checks(int argc, char **argv);
 int			sit_at_table(t_context *context);
 int			get_fork_id(int i, t_context *context);
-void		get_philosophers(t_context *context, t_philos *philos, t_forks *forks);
+void		get_philosophers(t_context *context,
+				t_philos *philos, t_forks *forks);
 void		get_mutexes(t_context *context, t_forks *forks);
 void		init_mutexes(t_forks *forks, t_context *context);
 void		kill_mutexes(t_forks *forks, t_context *context);

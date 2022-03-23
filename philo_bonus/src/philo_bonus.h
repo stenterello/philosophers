@@ -34,6 +34,7 @@ typedef struct s_forks
 typedef struct s_philos
 {
 	int			id;
+	int			pid;
 	int			dead;
 	uint64_t	last_meal;
 	int			times_eaten;
@@ -43,11 +44,14 @@ typedef struct s_philos
 	
 }				t_philos;
 
-int	usage(void);
-int	error_args(void);
-int	error_ui(void);
-int	general_error(void);
-int	error_too_many(void);
-int	checks(int argc, char **argv);
+int		usage(void);
+int		error_args(void);
+int		error_ui(void);
+int		general_error(void);
+int		error_too_many(void);
+int		checks(int argc, char **argv);
+void	get_philosophers(t_context *context, t_philos *philos, t_forks *forks);
+int		get_semaphores(t_forks *forks, t_context *context);
+
 
 #endif
