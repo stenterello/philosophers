@@ -1,33 +1,26 @@
 #include "philo_bonus.h"
 
-int	usage(void)
+void	usage(void)
 {
-	write_error("Usage: ./philo number_of_philosophers ");
-	write_error("time_to_die time_to_eat time_to_sleep ");
-	write_error("[number_of_times_each_philosophers_must_eat]\n");
-	return (-1);
+	die("Usage: ./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosophers_must_eat]\n");
 }
 
-int	error_args(void)
+void	error_args(void)
 {
-	write_error("Non-positive integers parameters were passed to executable.\n");
-	return (-1);
+	die("Non-positive integers parameters were passed to executable.\n");
 }
 
-int	error_ui(void)
+void	error_ui(void)
 {
-	write_error("Arguments must be of unsigned integer type.\n");
-	return (-1);
+	die("Arguments must be of unsigned integer type.\n");
 }
 
-int	general_error(void)
+void	general_error(void)
 {
-	write_error("Error.\n");
-	return (-1);
+	die("Error.\n");
 }
 
-int	error_too_many(void)
+void	error_too_many(void)
 {
-	write_error("Too many philosophers.\n");
-	return (-1);
+	die("Too many philosophers.\n");
 }

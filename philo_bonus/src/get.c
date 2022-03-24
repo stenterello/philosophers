@@ -10,9 +10,56 @@ int	get_fork_id(int i, t_context *context)
 		return (i);
 }
 
-void	get_philosophers(t_context *context, t_philos *philos, t_forks *forks)
+// char    *ft_itoa(int n)
+// {
+//     char	*ret;
+//     int		prov;
+//     int		i;
+
+//     i = 0;
+// 	ret = malloc(sizeof(char) * 20);
+//     prov = n;
+//     if (n < 10)
+//         ret[i] = (char)(n + 48);
+//     else
+//     {
+//         while (n / 10)
+//         {
+//             ret[i++] = prov / 10 + 48;
+//             prov = n % 10;
+//             n /= 10;
+//         }
+// 		ret[i++] = prov + 48;
+// 		ret[i] = '\0';
+//     }
+//     return (ret);
+// }
+
+// char	*sem_name(int n)
+// {
+// 	char	*base;
+// 	char	*name;
+// 	char	*ret;
+// 	int		i;
+// 	int		j;
+
+// 	base = "/sem_";
+// 	i = -1;
+// 	ret = malloc(sizeof(char) * 20);
+// 	while (base[++i])
+// 		ret[i] = base[i];
+// 	j = -1;
+// 	name = ft_itoa(n);
+// 	while (name[++j])
+// 		ret[i++] = name[j];
+// 	free(name);
+// 	ret[i] = '\0';
+// 	return (ret);
+// }
+
+void	get_philosophers(t_context *context, t_philos *philos, sem_t *forks)
 {
-	int	i;
+	int		i;
 
 	i = 0;
 	while (i < context->num_philos)
@@ -20,23 +67,20 @@ void	get_philosophers(t_context *context, t_philos *philos, t_forks *forks)
 		philos[i].id = i + 1;
 		philos[i].dead = 0;
 		philos[i].context = context;
-		philos[i].l_fork = &forks[get_fork_id(i + 1, context)];
-		philos[i].r_fork = &forks[get_fork_id(i, context)];
 		philos[i].times_eaten = 0;
 		philos[i].last_meal = 0;
+		philos[i].forks = forks;
 		i++;
 	}
 }
 
-int	get_semaphores(t_forks *forks, t_context *context)
+sem_t	*get_semaphores(t_context *context)
 {
-	int	i;
+	int		i;
+	sem_t	*ret;
 
 	i = -1;
-	while (++i < context->num_philos)
-	{
-		forks[i].id = i;
-		if (sem_init(&forks[i].sem, 1, 1) == -1);
-			die("Initialize semaphores produced an error");
-	}
+	sem_unlink("/semaphore");
+	ret = sem_open("/semaphore", O_CREAT, S_IRWXU, context->num_philos);
+	return (ret);
 }

@@ -1,19 +1,16 @@
 #include "philo_bonus.h"
 
-int	sit_at_table(t_context *context)
+void	sit_at_table(t_context *context)
 {
 	t_philos	philos[250];
-	t_forks		forks[250];
+	sem_t		*forks;
 
-	if (get_sempahores(&forks, context) == -1)
-		die("Semaphore initiation produced error");
-	get_philosophers(&philos, &forks, context);
+	forks = get_semaphores(context);
+	get_philosophers(context, philos, forks);
 	start_symposium(philos);
-
-	return (0);
 }
 
-int	philosophers(int argc, char **argv)
+void	philosophers(int argc, char **argv)
 {
 	t_context	context;
 
@@ -28,20 +25,21 @@ int	philosophers(int argc, char **argv)
 	context.some_die = 0;
 	context.start_time = get_start_time();
 	context.finished = 0;
+	sem_unlink("/writing_sem");
+	context.writing = sem_open("/writing_sem", O_CREAT, S_IRWXU, 1);
+	sem_unlink("/going");
+	context.going = sem_open("/going", O_CREAT, S_IRWXU, 1);
 	sit_at_table(&context);
-	return (0);
 }
 
 int	main(int argc, char **argv)
 {
 	if (argc < 5 || argc > 6)
-		return (usage());
+		usage();
 	else
 	{
-		if (checks(argc, argv) == -1)
-			return (-1);
-		if (philosophers(argc, argv) != 0)
-			return (general_error());
+		checks(argc, argv);
+		philosophers(argc, argv);
 	}
 	return (0);
 }

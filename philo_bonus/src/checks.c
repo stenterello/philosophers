@@ -64,7 +64,7 @@ static int	check_ull(char *str)
 	return (0);
 }
 
-int	checks(int argc, char **argv)
+void	checks(int argc, char **argv)
 {
 	int	i;
 
@@ -72,12 +72,11 @@ int	checks(int argc, char **argv)
 	while (i < argc)
 	{
 		if (ft_atoi(argv[i]) > 250 && i == 0)
-			return (error_too_many());
+			error_too_many();
 		if (ft_atoi(argv[i]) < 0 || check_digits(argv[i]) == -1)
-			return (error_args());
+			error_args();
 		if (check_ull(argv[i]) != 0)
-			return (error_ui());
+			error_ui();
 		i++;
 	}
-	return (0);
 }
