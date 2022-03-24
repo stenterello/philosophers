@@ -8,7 +8,6 @@ SRC = philo_bonus.c \
 		get.c \
 		symposium.c \
 		utils.c \
-		monitor.c \
 		single_process.c
 
 SRCS = $(addprefix src/, $(SRC))
