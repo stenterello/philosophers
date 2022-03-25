@@ -6,29 +6,12 @@ void	medea(t_philos *philos)
 	int	ret;
 
 	i = -1;
-	while (++i < philos[0].context->num_philos)
-	{
+	if (philos[0].context->times_to_eat != -1)
 		waitpid(-1, &ret, 0);
-		if (ret != 0)
-		{
-			i = -1;
-			while (++i < philos[0].context->num_philos)
-				kill(philos[i].pid, 15);
-			break ;
-		}
-		i++;
-	}
-}
-
-void	print_info(t_philos *philos)
-{
-	int	i;
-
-	i = -1;
+	else
+		waitpid(0, &ret, 0);
 	while (++i < philos[0].context->num_philos)
-	{
-		printf("Il filosofo %d ha mangiato %d volte\n", philos[i].id, philos[i].times_eaten);
-	}
+		kill(philos[i].pid, 15);
 }
 
 void	start_symposium(t_philos *philos)
@@ -36,7 +19,6 @@ void	start_symposium(t_philos *philos)
 	int	i;
 
 	i = -1;
-	sem_wait(philos[0].context->going);
 	while (++i < philos[0].context->num_philos)
 	{
 		philos[i].pid = fork();
@@ -46,13 +28,10 @@ void	start_symposium(t_philos *philos)
 			born_child(&philos[i]);
 		usleep(50);
 	}
-	sem_wait(philos[0].context->going);
-	i = -1;
-	while (++i < philos[0].context->num_philos)
-		kill(philos[i].pid, 15);
+	medea(philos);
 	sem_close(philos[0].context->writing);
 	sem_close(philos[0].forks);
 	sem_unlink("/writing_sem");
 	sem_unlink("/semaphore");
-	
+	sem_unlink("/going");
 }
