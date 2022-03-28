@@ -23,12 +23,11 @@ void	philosophers(int argc, char **argv)
 	else
 		context.times_to_eat = -1;
 	context.some_die = 0;
-	context.start_time = get_start_time();
 	context.finished = 0;
 	sem_unlink("/writing_sem");
 	context.writing = sem_open("/writing_sem", O_CREAT, S_IRWXU, 1);
-	sem_unlink("/going");
-	context.going = sem_open("/going", O_CREAT, S_IRWXU, 1);
+	sem_unlink("/meal_check");
+	context.meal_check = sem_open("/meal_check", O_CREAT, S_IRWXU, 1);
 	sit_at_table(&context);
 }
 

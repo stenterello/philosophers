@@ -18,7 +18,6 @@ void	ft_putendl_err(char *str)
 {
 	ft_putstr_err(str);
 	ft_putchar_err('\n');
-	exit(-1);
 }
 
 void	die(char *str)

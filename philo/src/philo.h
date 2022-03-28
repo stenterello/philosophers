@@ -51,6 +51,7 @@ typedef struct s_philos
 	t_forks			*l_fork;
 	t_forks			*r_fork;
 	pthread_t		thread;
+	pthread_mutex_t	meal_check;
 }				t_philos;
 
 int			usage(void);

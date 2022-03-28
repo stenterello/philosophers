@@ -6,12 +6,18 @@ void	medea(t_philos *philos)
 	int	ret;
 
 	i = -1;
-	if (philos[0].context->times_to_eat != -1)
-		waitpid(-1, &ret, 0);
-	else
-		waitpid(0, &ret, 0);
 	while (++i < philos[0].context->num_philos)
-		kill(philos[i].pid, 15);
+	{
+		waitpid(-1, &ret, 0);
+		if (ret != 0)
+		{
+			i = -1;
+			while (++i < philos[0].context->num_philos)
+				kill(philos[i].pid, 15);
+			break ;
+		}
+		i++;
+	}
 }
 
 void	start_symposium(t_philos *philos)
@@ -19,6 +25,7 @@ void	start_symposium(t_philos *philos)
 	int	i;
 
 	i = -1;
+	philos[0].context->start_time = get_start_time();
 	while (++i < philos[0].context->num_philos)
 	{
 		philos[i].pid = fork();
@@ -33,5 +40,5 @@ void	start_symposium(t_philos *philos)
 	sem_close(philos[0].forks);
 	sem_unlink("/writing_sem");
 	sem_unlink("/semaphore");
-	sem_unlink("/going");
+	sem_unlink("/meal_check");
 }

@@ -9,8 +9,10 @@
 # include <pthread.h>
 # include <sys/time.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <stdint.h>
 # include <semaphore.h>
+# include <fcntl.h>
 
 typedef struct s_context
 {
@@ -23,7 +25,7 @@ typedef struct s_context
 	int			finished;
 	uint64_t	start_time;
 	sem_t		*writing;
-	sem_t		*going;
+	sem_t		*meal_check;
 	pthread_t	monitor;
 }				t_context;
 
@@ -34,6 +36,7 @@ typedef struct s_philos
 	int			dead;
 	uint64_t	last_meal;
 	int			times_eaten;
+	int			is_dead;
 	t_context	*context;
 	sem_t		*forks;
 }				t_philos;
