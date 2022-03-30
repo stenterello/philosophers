@@ -21,7 +21,7 @@ void	don_t_wake_cpu(t_philos *philo, uint64_t time)
 	{
 		if ((get_time(philo, 0) - philo->context->start_time) - start > time)
 			break ;
-		usleep(50);
+		usleep(10);
 	}
 }
 
@@ -32,11 +32,10 @@ void	*cycle(void *phi)
 	philo = (t_philos *)phi;
 	while (!philo->context->finished && !philo->context->some_die)
 	{
-		if (philo->id % 2)
+		if (philo->id % 2 == 0)
 			left_handed(philo);
 		else
 			right_handed(philo);
-		pthread_mutex_lock(&philo->meal_check);
 		write_message(philo, 0);
 		philo->times_eaten++;
 		pthread_mutex_unlock(&philo->meal_check);
@@ -65,7 +64,7 @@ void	*monitor(void *philos)
 			if (get_time(&philo[0], 0) - philo[0].context->start_time
 				- philo[i].last_meal > philo[0].context->time_die)
 			{
-				philo[i].context->some_die = 1;
+				//philo[i].context->some_die = 1;
 				pthread_mutex_lock(&philo[0].context->writing);
 				printf("%lu %d died\n", get_time(&philo[0], 0)
 					- philo[0].context->start_time, philo[i].id);
@@ -89,7 +88,7 @@ void	start_symposium(t_context *context, t_philos *philos)
 	while (++i < context->num_philos)
 	{
 		pthread_create(&philos[i].thread, NULL, &cycle, &philos[i]);
-		//usleep(50);
+		usleep(500);
 	}
 	pthread_join(context->monitor, NULL);
 }

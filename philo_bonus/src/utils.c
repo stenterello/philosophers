@@ -34,15 +34,16 @@ void	don_t_wake_cpu(t_philos *philo, uint64_t time)
 	start = get_time(philo, 0) - philo->context->start_time;
 	while (!philo->context->some_die)
 	{
-		if ((get_time(philo, 0) - philo->context->start_time) - start > time)
+		if ((get_time(philo, 0) - philo->context->start_time) - start >= time)
 			break ;
-		usleep(50);
+		usleep(10);
 	}
 }
 
 void	write_message(t_philos *philo, int flag)
 {
-	if (!flag && !philo->context->some_die && !philo->context->finished && !philo->is_dead)
+	sem_wait(philo->context->writing);
+	if (!flag && !philo->context->some_die && !philo->context->finished)
 		printf("%lu %d is eating\n", get_time(philo, 1)
 			- philo->context->start_time, philo->id);
 	else if (flag == 1 && !philo->context->some_die
@@ -53,4 +54,5 @@ void	write_message(t_philos *philo, int flag)
 		&& !philo->context->finished)
 		printf("%lu %d is thinking\n", get_time(philo, 0)
 			- philo->context->start_time, philo->id);
+	sem_post(philo->context->writing);
 }
