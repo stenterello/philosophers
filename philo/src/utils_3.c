@@ -17,14 +17,14 @@ void	left_handed(t_philos *philo)
 	pthread_mutex_lock(&philo->l_fork->mutex);
 	pthread_mutex_lock(&philo->context->writing);
 	if (!philo->context->finished && !philo->context->some_die)
-		printf("%llu %d has taken a fork\n", get_time(philo, 0)
+		printf("%lu %d has taken a fork\n", get_time(philo, 0)
 			- philo->context->start_time, philo->id);
 	pthread_mutex_unlock(&philo->context->writing);
 	pthread_mutex_lock(&philo->r_fork->mutex);
 	pthread_mutex_lock(&philo->meal_check);
 	pthread_mutex_lock(&philo->context->writing);
 	if (!philo->context->finished && !philo->context->some_die)
-		printf("%llu %d has taken a fork\n", get_time(philo, 0)
+		printf("%lu %d has taken a fork\n", get_time(philo, 0)
 			- philo->context->start_time, philo->id);
 	pthread_mutex_unlock(&philo->context->writing);
 }
@@ -34,14 +34,14 @@ void	right_handed(t_philos *philo)
 	pthread_mutex_lock(&philo->r_fork->mutex);
 	pthread_mutex_lock(&philo->context->writing);
 	if (!philo->context->finished && !philo->context->some_die)
-		printf("%llu %d has taken a fork\n", get_time(philo, 0)
+		printf("%lu %d has taken a fork\n", get_time(philo, 0)
 			- philo->context->start_time, philo->id);
 	pthread_mutex_unlock(&philo->context->writing);
 	pthread_mutex_lock(&philo->l_fork->mutex);
 	pthread_mutex_lock(&philo->meal_check);
 	pthread_mutex_lock(&philo->context->writing);
 	if (!philo->context->finished && !philo->context->some_die)
-		printf("%llu %d has taken a fork\n", get_time(philo, 0)
+		printf("%lu %d has taken a fork\n", get_time(philo, 0)
 			- philo->context->start_time, philo->id);
 	pthread_mutex_unlock(&philo->context->writing);
 }
@@ -77,7 +77,7 @@ void	kill_philo(t_philos *philo)
 {
 	philo->context->some_die = 1;
 	pthread_mutex_lock(&philo[0].context->writing);
-	printf("%llu %d died\n", get_time(&philo[0], 0)
+	printf("%lu %d died\n", get_time(&philo[0], 0)
 		- philo[0].context->start_time, philo->id);
 	return ;
 }

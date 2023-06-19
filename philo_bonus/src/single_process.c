@@ -32,7 +32,7 @@ void	*monitor(void *philos)
 		{
 			philo->context->some_die = 1;
 			sem_wait(philo->context->writing);
-			printf("%llu %d died\n", get_time(philo, 0)
+			printf("%lu %d died\n", get_time(philo, 0)
 				- philo->context->start_time, philo->id);
 			exit(1);
 		}
@@ -49,7 +49,7 @@ void	take_fork(t_philos *philo)
 	sem_wait(philo->forks);
 	sem_wait(philo->context->writing);
 	if (!philo->context->finished && !philo->context->some_die)
-		printf("%llu %d has taken a fork\n", get_time(philo, 0)
+		printf("%lu %d has taken a fork\n", get_time(philo, 0)
 			- philo->context->start_time, philo->id);
 	sem_post(philo->context->writing);
 }

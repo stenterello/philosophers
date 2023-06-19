@@ -25,15 +25,15 @@ void	write_message(t_philos *philo, int flag)
 {
 	pthread_mutex_lock(&philo->context->writing);
 	if (!flag && !philo->context->some_die && !philo->context->finished)
-		printf("%llu %d is eating\n", get_time(philo, 1)
+		printf("%lu %d is eating\n", get_time(philo, 1)
 			- philo->context->start_time, philo->id);
 	else if (flag == 1 && !philo->context->some_die
 		&& !philo->context->finished)
-		printf("%llu %d is sleeping\n", get_time(philo, 0)
+		printf("%lu %d is sleeping\n", get_time(philo, 0)
 			- philo->context->start_time, philo->id);
 	else if (flag == 2 && !philo->context->some_die
 		&& !philo->context->finished)
-		printf("%llu %d is thinking\n", get_time(philo, 0)
+		printf("%lu %d is thinking\n", get_time(philo, 0)
 			- philo->context->start_time, philo->id);
 	pthread_mutex_unlock(&philo->context->writing);
 }
